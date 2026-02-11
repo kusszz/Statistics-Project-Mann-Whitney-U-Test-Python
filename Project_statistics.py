@@ -37,8 +37,13 @@ test=test.dropna()
 test = test[test["Czy ból pleców wpływa na Twój nastrój/stres?"] != 'Nie dotyczy']
 
 # Physical activity->binary
-# Mało ruchu (low activity): brak, Rzadziej niż 1 raz w tygodniu, 1–2 razy w tygodniu
-# Dużo ruchu (high activity): 3–4 razy w tygodniu, 5 razy w tygodniu lub więcej
+# Mało ruchu (low activity): 
+#    - brak (none),
+#     - Rzadziej niż 1 raz w tygodniu (less than once a week), 
+#     - 1–2 razy w tygodniu (1-2 times a week)
+# Dużo ruchu (high activity):
+#     - 3–4 razy w tygodniu, (3-4 times a week)
+#     - 5 razy w tygodniu lub więcej (5 times a week or more)
 
 binary= {
     'brak': "Mało_ruchu",
@@ -52,9 +57,9 @@ test["Aktywność fizyczna (ćwiczenia, treningi, spacery co najmniej 20 minut, 
 
 # well-being -> ordinal
 ordinal={
-    'Nie' : 0,
-    'Trochę' : 1,
-    'Tak, bardzo': 2
+    'Nie' : 0, #no
+    'Trochę' : 1, #a little bit 
+    'Tak, bardzo': 2 #yes, very much
 }
 test.loc[:,"Czy ból pleców wpływa na Twój nastrój/stres?"]=test["Czy ból pleców wpływa na Twój nastrój/stres?"].replace(ordinal)
 
@@ -76,11 +81,11 @@ print(count_rejections(low, high))
 
 #approach 2 ------------------------------------------------------------------------------------
 # This time I'm taking:
-# "Physical activity (exercises, workouts, walks of at least 20 minutes, etc.)" (binary),
-# "Does back pain affect your mood/stress?" (ordinal),
-# "Has back pain prevented you from attending a social event?" (ordinal) ,
-# "Does back pain make it difficult for you to sleep?" (ordinal),
-# "Does back pain limit your professional activity?" (ordinal)
+#     -"Physical activity (exercises, workouts, walks of at least 20 minutes, etc.)" (binary),
+#     -"Does back pain affect your mood/stress?" (ordinal),
+#     -"Has back pain prevented you from attending a social event?" (ordinal) ,
+#     -"Does back pain make it difficult for you to sleep?" (ordinal),
+#     -"Does back pain limit your professional activity?" (ordinal)
 
 test2=plik[["Aktywność fizyczna (ćwiczenia, treningi, spacery co najmniej 20 minut, itp.)","Czy ból pleców wpływa na Twój nastrój/stres?",'Czy ból pleców uniemożliwił Ci udział w wydarzeniu towarzyskim?','Czy ból pleców utrudnia Ci sen?','Czy ból pleców ogranicza Twoją aktywność zawodową?']]
 
@@ -97,25 +102,25 @@ test2.loc[:,"Aktywność fizyczna (ćwiczenia, treningi, spacery co najmniej 20 
 test2.loc[:,"Czy ból pleców wpływa na Twój nastrój/stres?"]=test2["Czy ból pleców wpływa na Twój nastrój/stres?"].replace(ordinal)
 
 social_event={
-    'Nie': 0,
-    'Tak, raz':1,
-    'Tak, wielokrotnie':2
+    'Nie': 0, #no
+    'Tak, raz':1, #yes, once
+    'Tak, wielokrotnie':2 #yes, repeatedly
 }
 
 test2.loc[:,'Czy ból pleców uniemożliwił Ci udział w wydarzeniu towarzyskim?']=test2['Czy ból pleców uniemożliwił Ci udział w wydarzeniu towarzyskim?'].replace(social_event)
 
 sleep={
-    'Nigdy':0,
-    'Rzadko':1,
-    'Czasami':2,
-    'Tak, często':3
+    'Nigdy':0, #never
+    'Rzadko':1, #rarely
+    'Czasami':2, #Sometimes 
+    'Tak, często':3 #yes, often
 }
 test2.loc[:,'Czy ból pleców utrudnia Ci sen?']=test2['Czy ból pleców utrudnia Ci sen?'].replace(sleep)
 
 professional_activity={
-    'Nie': 0,
-    'Tak, trochę':1,
-    'Tak, znacząco':2
+    'Nie': 0, #no
+    'Tak, trochę':1, #yes, a little bit
+    'Tak, znacząco':2 #yes, very much
 }
 
 test2.loc[:,'Czy ból pleców ogranicza Twoją aktywność zawodową?']=test2['Czy ból pleców ogranicza Twoją aktywność zawodową?'].replace(professional_activity)
@@ -134,5 +139,6 @@ for row in test2.itertuples():
 print(perform_test(low2, high2))
 
 print(count_rejections(low2, high2))
+
 
 
